@@ -25,6 +25,29 @@ public class Main {
         int nbCoups1=0;
         int nbCoups2=0;
         int valeur=1;
+        int multi=0;
+
+        //Initialisation du scanner
+        Scanner sc = new Scanner(System.in);
+
+        //Demander multi/solo
+        erreur=true;
+        while (erreur){
+            System.out.println("Voulez-vous jouer en:");
+            System.out.println("1-Multijoueur");
+            System.out.println("Ou");
+            System.out.println("2-Solo (contre l'ordinateur)");
+            multi=sc.nextInt();
+            if (multi==2){
+                erreur=false;
+            }
+            else if (multi==1){
+                erreur=false;
+            }
+            else{
+                System.out.println("erreur");
+            }
+        }
 
         for (int i=0;i<coups1.length;i++){
             coups1[i]=0;
@@ -34,11 +57,16 @@ public class Main {
         }
 
         //demander le nom des joueurs
-        Scanner sc = new Scanner(System.in);
         System.out.println("Nom du joueur 1: ");
-        nom1=sc.nextLine();
-        System.out.println("Nom du joueur 2: ");
-        nom2=sc.nextLine();
+        nom1=sc.next();
+
+        if (multi==1) {
+            System.out.println("Nom du joueur 2: ");
+            nom2 = sc.next();
+        }
+        else {
+            nom2="Felicity";
+        }
 
         //Boucle qui recommence à chaque partie
         while (jeu){
@@ -54,15 +82,38 @@ public class Main {
 
                 erreur=true;
                 while (erreur){
-                if (nbtour%2==1){
+                if (nbtour%2==0){
                     System.out.println(nom1+", combien d'allumettes voulez-vous retirer du paquet? (entre 1 et 3)");
+                    retirerAllumettes=sc.nextInt();
                 }
 
                 else {
                     System.out.println(nom2+", combien d'allumettes voulez-vous retirer du paquet? (entre 1 et 3)");
+                    if (multi==1){
+                        retirerAllumettes=sc.nextInt();
+                    }
+                    else{
+                        if (nbAllumettes==4){
+                            retirerAllumettes=3;
+                        }
+                        else if (nbAllumettes==3){
+                            retirerAllumettes=2;
+                        }
+                        else if (nbAllumettes==2){
+                            retirerAllumettes=1;
+                        }
+                        else{
+                            if ((nbAllumettes-1)/4==0){
+                                retirerAllumettes=(int)(Math.random()*3)+1;
+                            }
+                            else{
+                                retirerAllumettes=(nbAllumettes-1)%4;
+                            }
+                        }
+                    }
                 }
 
-                retirerAllumettes=sc.nextInt();
+
                 if (retirerAllumettes<1 || retirerAllumettes>3){
                     System.out.println("erreur");
                 }
@@ -72,7 +123,7 @@ public class Main {
                 }
 
                 //Enregistrer mes résultats
-                if (nbtour%2==1){
+                if (nbtour%2==0){
                     coups1[nbCoups1]=retirerAllumettes;
                     nbCoups1++;
                 }
@@ -85,7 +136,7 @@ public class Main {
                 nbAllumettes-=retirerAllumettes;
                 nbtour++;
             }
-            if (nbtour%2==1){
+            if (nbtour%2==0){
                 System.out.println("And the winner is...... "+nom1+"!!!!!!!!!!!!!!!");
             }
             else {
@@ -129,5 +180,8 @@ public class Main {
                 }
             }
         }
+
+        //Fermeture du scanner
+        sc.close();
     }
 }
